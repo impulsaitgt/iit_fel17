@@ -13,3 +13,4 @@ class ResPartner(models.Model):
     fel_UsuarioApi = fields.Char(string='Usuario Api')
     fel_LlaveApi = fields.Char(string='Llave Api')
     fel_service = fields.Selection([ ('S','Si'),('N','No')],string='Usa Web Service',required=True, default='N')
+    fel_url = fields.Char(string='URL para visualizacion')
