@@ -13,6 +13,7 @@
     ],
     'data': [
         "views/account_move.xml",
+        "views/account_journal.xml",
         "views/res_partner.xml",
         "views/res_company.xml"
     ]

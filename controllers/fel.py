@@ -3,6 +3,7 @@ import json, requests
 import base64
 import random
 from datetime import datetime
+from odoo.exceptions import ValidationError
 
 
 class controllerfel:
@@ -342,7 +343,7 @@ class controllerfel:
 
         return GTAnulaciondocumento
 
-    def anulafel(self,data):
+    def firmaanulafel(self,data):
 
         url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
 
@@ -357,3 +358,66 @@ class controllerfel:
         response = requests.post(url, data=ET.tostring(data), headers=headers)
 
         return json.loads(response.text)
+
+    def generaFel(self):
+        if (self.move_type == "out_invoice"):
+
+            fel_Xml = controllerfel.genxml(self,'FACT')
+
+            if self.env.company.fel_entorno == "D":
+                ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/pararevisar.xml",encoding="unicode")
+            else:
+                ET.ElementTree(fel_Xml).write("/opt/odoo/fel/pararevisar.xml",encoding="unicode")
+
+
+            data = controllerfel.firmafel(self,fel_Xml)
+
+            if not data['resultado']:
+                errores = data['descripcion_errores']
+                raise ValidationError(errores[0]['mensaje_error'])
+
+            if self.env.company.fel_entorno == "D":
+                ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml", encoding="unicode")
+            else:
+                ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml",encoding="unicode")
+
+            self.fel_uuid = data['uuid']
+            self.fel_serie = data['serie']
+            self.fel_numero = data['numero']
+            self.fel_certificado = 'Certificado'
+            self.fel_fecha = self.create_date
+
+        if (self.move_type == "out_refund"):
+
+            fel_Xml = controllerfel.genxml(self,'NCRE')
+
+            data = controllerfel.firmafel(self,fel_Xml)
+
+            if not data['resultado']:
+                errores = data['descripcion_errores']
+                raise ValidationError(errores[0]['mensaje_error'])
+
+            if self.env.company.fel_entorno == "D":
+                ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + data['uuid'] + ".xml", encoding="unicode")
+            else:
+                ET.ElementTree(fel_Xml).write("/opt/odoo/fel/" + data['uuid'] + ".xml",encoding="unicode")
+
+            self.fel_uuid = data['uuid']
+            self.fel_serie = data['serie']
+            self.fel_numero = data['numero']
+            self.fel_certificado = 'Certificado'
+            self.fel_fecha = self.create_date
+
+    def anulafel(self):
+        if (self.fel_certificado == 'Certificado'):
+
+            fel_AnulaXml = controllerfel.genxmlanulacion(self)
+
+            print(ET.tostring(fel_AnulaXml))
+
+            anula_fel = controllerfel.firmaanulafel(self,fel_AnulaXml)
+
+            if not anula_fel['resultado']:
+                errores = anula_fel['descripcion_errores']
+                raise ValidationError(errores[0]['mensaje_error'])
+
