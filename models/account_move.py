@@ -1,5 +1,4 @@
 from odoo import api, models, fields
-import xml.etree.ElementTree as ET
 from ..controllers.fel import controllerfel as confel
 
 
@@ -12,6 +11,7 @@ class account_move(models.Model):
     fel_certificado = fields.Char(string='Estatus FEL', default='No certificado', readonly=True) # Si esta certificado
     fel_fecha = fields.Date(string='Fecha de factura firmada') # Para registro
     fel_tipo_registro = fields.Selection(string="fel_tipo_registro", related="journal_id.fel_tipo_registro")
+    fel_url = fields.Char(string="Infile", readonly=True, compute="_fel_")
 
     @api.model
     def create(self,vals):
@@ -40,3 +40,10 @@ class account_move(models.Model):
     def action_firma_fel(self):
         if self.journal_id.fel_tipo_registro == 'Si':
             confel.generaFel(self)
+
+    def _fel_(self):
+        company = self.env['res.company'].search([('id', '=', self.env.company.id)])
+        if self.fel_uuid:
+            self.fel_url = company.fel_url + self.fel_uuid
+        else:
+            self.fel_url = 'N/A'

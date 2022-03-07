@@ -17,6 +17,7 @@
                         <field name="fel_UsuarioApi" />
                         <field name="fel_LlaveApi" />
                         <field name="fel_service" />
+                        <field name="fel_url" />
                     </group>
                 </page>
             </page>
