@@ -127,7 +127,11 @@ class controllerfel:
 
             ET.SubElement(Item, "dte:Cantidad").text = cantidad
             ET.SubElement(Item, "dte:UnidadMedida").text = "UND"
-            ET.SubElement(Item, "dte:Descripcion").text = detalleFactura.product_id.name
+            # ET.SubElement(Item, "dte:Descripcion").text = detalleFactura.product_id.name
+            producto_sintres = detalleFactura.product_id.name.replace('   ', ' ')
+            producto_sindos = producto_sintres.replace('  ', ' ')
+            producto = producto_sindos.strip()
+            ET.SubElement(Item, "dte:Descripcion").text = producto
             ET.SubElement(Item, "dte:PrecioUnitario").text = preciounitario
             ET.SubElement(Item, "dte:Precio").text = precio
             ET.SubElement(Item, "dte:Descuento").text = descuento
