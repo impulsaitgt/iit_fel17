@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+accesos_fel_frases_administrador,Acceso a frases fel,model_fel_res_partner_frases,fel_group_administrador,1,1,1,1

@@ -37,12 +37,22 @@ class controllerfel:
 
         dicEmisor = {
             'AfiliacionIVA': "GEN",
-            'CodigoEstablecimiento': "1",
-            'CorreoEmisor': "cleanfactoryvijusa@hotmail.com",
-            'NITEmisor': "2459413K",
-            'NombreComercial': "Rosa Victoria Rosado Lara de Estrada",
-            'NombreEmisor': "Rosa Victoria Rosado Lara de Estrada"
+            'CodigoEstablecimiento': self.env.company.fel_codigo_establecimiento,
+            'CorreoEmisor': self.env.company.fel_correo_emisor,
+            'NITEmisor': self.env.company.fel_nit_emisor,
+            'NombreComercial': self.env.company.fel_nombre_Comercial,
+            'NombreEmisor': self.env.company.fel_nombre_emisor
         }
+
+        # dicEmisor = {
+        #     'AfiliacionIVA': "GEN",
+        #     'CodigoEstablecimiento': "1",
+        #     'CorreoEmisor': "cleanfactoryvijusa@hotmail.com",
+        #     'NITEmisor': "2459413K",
+        #     'NombreComercial': "Rosa Victoria Rosado Lara de Estrada",
+        #     'NombreEmisor': "Rosa Victoria Rosado Lara de Estrada"
+        # }
+
 
         dicReceptor = {
             'CorreoReceptor': "",
@@ -68,10 +78,15 @@ class controllerfel:
         Emisor = ET.SubElement(DatosEmision, "dte:Emisor", dicEmisor)
         DireccionEmisor = ET.SubElement(Emisor, "dte:DireccionEmisor")
 
-        ET.SubElement(DireccionEmisor, "dte:Direccion").text = "0 Av. A 9-24 zona 9"
-        ET.SubElement(DireccionEmisor, "dte:CodigoPostal").text = "01001"
-        ET.SubElement(DireccionEmisor, "dte:Municipio").text = "Guatemala"
-        ET.SubElement(DireccionEmisor, "dte:Departamento").text = "Guatemala"
+        # ET.SubElement(DireccionEmisor, "dte:Direccion").text = "0 Av. A 9-24 zona 9"
+        # ET.SubElement(DireccionEmisor, "dte:CodigoPostal").text = "01001"
+        # ET.SubElement(DireccionEmisor, "dte:Municipio").text = "Guatemala"
+        # ET.SubElement(DireccionEmisor, "dte:Departamento").text = "Guatemala"
+
+        ET.SubElement(DireccionEmisor, "dte:Direccion").text = self.env.company.fel_direccion
+        ET.SubElement(DireccionEmisor, "dte:CodigoPostal").text = self.env.company.fel_codigo_postal
+        ET.SubElement(DireccionEmisor, "dte:Municipio").text = self.env.company.fel_municipio
+        ET.SubElement(DireccionEmisor, "dte:Departamento").text = self.env.company.fel_departamento
         ET.SubElement(DireccionEmisor, "dte:Pais").text = "GT"
 
         Receptor = ET.SubElement(DatosEmision, "dte:Receptor", dicReceptor)
@@ -101,8 +116,20 @@ class controllerfel:
 
         if (tipo == 'FACT'):
             Frases = ET.SubElement(DatosEmision, "dte:Frases")
-            ET.SubElement(Frases, "dte:Frase", dicFrase2)
-            # ET.SubElement(Frases, "dte:Frase", dicFrase1)
+            for frase in self.env.company.fel_frases:
+                dicFrase = {
+                    'CodigoEscenario': frase.fel_frases_codigo_escenario,
+                    'TipoFrase': frase.fel_frases_tipo_frase
+                }
+                ET.SubElement(Frases, "dte:Frase", dicFrase)
+
+
+
+
+        # if (tipo == 'FACT'):
+        #     Frases = ET.SubElement(DatosEmision, "dte:Frases")
+        #     ET.SubElement(Frases, "dte:Frase", dicFrase2)
+        #     # ET.SubElement(Frases, "dte:Frase", dicFrase1)
 
         Items = ET.SubElement(DatosEmision, "dte:Items")
 
@@ -264,7 +291,8 @@ class controllerfel:
         #     'Identificador': self.name,
         # }
 
-        url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
+        url = self.env.company.fel_url_firma
+        # url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
 
         #print(data[0][1][0].text)
 
@@ -349,7 +377,8 @@ class controllerfel:
 
     def firmaanulafel(self,data):
 
-        url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
+        url = self.env.company.fel_url_firma
+        # url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
 
         headers = {
             'UsuarioFirma': self.env.company.fel_UsuarioFirma,
