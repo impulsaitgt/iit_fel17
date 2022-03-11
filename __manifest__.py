@@ -12,6 +12,8 @@
         "account_debit_note"
     ],
     'data': [
+        "security/fel_security.xml",
+        "security/ir.model.access.csv",
         "views/account_move.xml",
         "views/account_journal.xml",
         "views/res_partner.xml",
