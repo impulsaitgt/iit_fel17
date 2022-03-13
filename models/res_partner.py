@@ -11,7 +11,8 @@ class ResPartner(models.Model):
     def onchange_vat(self):
         if (self.vat):
 
-            url = "https://consultareceptores.feel.com.gt/rest/action"
+            # url = "https://consultareceptores.feel.com.gt/rest/action"
+            url = self.env.company.fel_url_nit
 
             data = {
                 # 'emisor_codigo': "2459413K",
