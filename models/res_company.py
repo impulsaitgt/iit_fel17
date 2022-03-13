@@ -6,6 +6,7 @@ class ResPartner(models.Model):
 
     fel_emisor_codigo = fields.Char(string='Emisor Codigo')
     fel_emisor_clave = fields.Char(string='Emisor Clave')
+    fel_url_nit = fields.Char(string='Url Nit')
     fel_entorno = fields.Selection([ ('P','Produccion'),('D','Desarrollo/Pruebas')],string='Entorno',required=True, default='D')
 
     fel_UsuarioFirma = fields.Char(string='Usuario Firma (Prefijo WS)')
