@@ -405,7 +405,17 @@ class controllerfel:
 
             data = controllerfel.firmafel(self,fel_Xml)
 
+
+
             if not data['resultado']:
+                if self.env.company.fel_entorno == "D":
+                    ruta = "/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/error.json"
+                else:
+                    ruta = "/opt/odoo/fel/error.json"
+
+                with open(ruta, 'w') as fp:
+                    json.dump(data, fp)
+
                 errores = data['descripcion_errores']
                 raise ValidationError(errores[0]['mensaje_error'])
 
@@ -427,6 +437,15 @@ class controllerfel:
             data = controllerfel.firmafel(self,fel_Xml)
 
             if not data['resultado']:
+
+                if self.env.company.fel_entorno == "D":
+                    ruta = "/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/error.json"
+                else:
+                    ruta = "/opt/odoo/fel/error.json"
+
+                with open(ruta, 'w') as fp:
+                    json.dump(data, fp)
+
                 errores = data['descripcion_errores']
                 raise ValidationError(errores[0]['mensaje_error'])
 
