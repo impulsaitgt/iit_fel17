@@ -395,7 +395,7 @@ class controllerfel:
     def generaFel(self):
         if (self.move_type == "out_invoice"):
 
-            fel_Xml = controllerfel.genxml(self,'FACT')
+            fel_Xml = controllerfel.genxml(self,self.journal_id.fel_tipo_fel)
 
             if self.env.company.fel_entorno == "D":
                 ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/pararevisar.xml",encoding="unicode")

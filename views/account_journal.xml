@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
         <field name="type" position="after">
             <field name="fel_tipo_registro"/>
+            <field name="fel_tipo_fel"/>
         </field>
         </field>
     </record>
