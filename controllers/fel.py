@@ -363,7 +363,7 @@ class controllerfel:
             "ID" : "DatosAnulacion",
             "IDReceptor" : self.partner_id.vat,
             "MotivoAnulacion" : "Cancelacion de factura",
-            "NITEmisor" : "2459413K",
+            "NITEmisor" : self.env.company.fel_nit_emisor,
             "NumeroDocumentoAAnular" : self.fel_uuid
         }
 
@@ -432,7 +432,7 @@ class controllerfel:
 
         if (self.move_type == "out_refund"):
 
-            fel_Xml = controllerfel.genxml(self,'NCRE')
+            fel_Xml = controllerfel.genxml(self,self.journal_id.fel_tipo_fel)
 
             data = controllerfel.firmafel(self,fel_Xml)
 
