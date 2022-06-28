@@ -49,6 +49,7 @@
                                     <control>
                                         <create name="agrega_frase" string="Agrega Frase"/>
                                     </control>
+                                    <field name="fel_frases_tipos"/>
                                     <field name="fel_frases_codigo_escenario"/>
                                     <field name="fel_frases_tipo_frase"/>
                                 </tree>
