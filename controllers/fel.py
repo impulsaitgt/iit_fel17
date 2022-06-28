@@ -114,14 +114,27 @@ class controllerfel:
 
         ET.SubElement(DireccionReceptor, "dte:Pais").text = "GT"
 
-        if (tipo == 'FACT'):
+        # Aqui empieza frases que funcionan
+        # if (tipo == 'FACT'):
+        #     Frases = ET.SubElement(DatosEmision, "dte:Frases")
+        #     for frase in self.env.company.fel_frases:
+        #         dicFrase = {
+        #             'CodigoEscenario': frase.fel_frases_codigo_escenario,
+        #             'TipoFrase': frase.fel_frases_tipo_frase
+        #         }
+        #         ET.SubElement(Frases, "dte:Frase", dicFrase)
+        # Aqui termina frases que funcionan
+
+        if (tipo != 'NCRE') and (tipo != 'NDEB'):
             Frases = ET.SubElement(DatosEmision, "dte:Frases")
             for frase in self.env.company.fel_frases:
                 dicFrase = {
                     'CodigoEscenario': frase.fel_frases_codigo_escenario,
                     'TipoFrase': frase.fel_frases_tipo_frase
                 }
-                ET.SubElement(Frases, "dte:Frase", dicFrase)
+
+                if frase.fel_frases_tipos.count(tipo) == 1:
+                    ET.SubElement(Frases, "dte:Frase", dicFrase)
 
 
 
@@ -188,7 +201,7 @@ class controllerfel:
         ET.SubElement(TotalImpuestos, "dte:TotalImpuesto", dicTotalImpuesto)
         ET.SubElement(Totales, "dte:GranTotal").text = str(abs(round(self.amount_total_signed, 2)))
 
-        if (tipo == 'NCRE'):
+        if (tipo == 'NCRE') or (tipo == 'NDEB'):
             Complementos = ET.SubElement(DatosEmision, "dte:Complementos")
 
             diComplemento = {
@@ -202,7 +215,7 @@ class controllerfel:
             dicNota = {
                 'xmlns:cno': "http://www.sat.gob.gt/face2/ComplementoReferenciaNota/0.1.0",
                 'FechaEmisionDocumentoOrigen': str(self.fel_fecha),
-                'MotivoAjuste': "Anulacion",
+                'MotivoAjuste': "Ajustes/Modificaciones",
                 'NumeroAutorizacionDocumentoOrigen' : self.fel_uuid,
                 'NumeroDocumentoOrigen' : self.fel_numero,
                 'SerieDocumentoOrigen' : self.fel_serie,
@@ -211,6 +224,59 @@ class controllerfel:
             }
 
             ET.SubElement(Complemento, "cno:ReferenciasNota", dicNota)
+
+        if (tipo == 'FESP'):
+            Complementos = ET.SubElement(DatosEmision, "dte:Complementos")
+
+            diComplemento = {
+                'IDComplemento': "Especial",
+                'NombreComplemento': "Especial",
+                'URIComplemento': "http://www.sat.gob.gt/fel/especial.xsd",
+            }
+
+            Complemento = ET.SubElement(Complementos, "dte:Complemento", diComplemento)
+
+            dicEsp = {
+                'xmlns:cfe': "http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0",
+                'Version' : "1",
+                'xsi:schemaLocation' : "http://www.sat.gob.gt/face2/ComplementoFacturaEspecial/0.1.0"
+            }
+
+            FacturaEspecial = ET.SubElement(Complemento, "cfe:RetencionesFacturaEspecial", dicEsp)
+
+            RetencionISR = round((self.amount_total_signed - self.amount_tax_signed) * (self.journal_id.fel_retencion_isr/100), 2)
+            RetencionIVA = round(self.amount_tax_signed, 2)
+            ET.SubElement(FacturaEspecial, "cfe:RetencionISR").text = str(abs(RetencionISR))
+            ET.SubElement(FacturaEspecial, "cfe:RetencionIVA").text = str(abs(RetencionIVA))
+            ET.SubElement(FacturaEspecial, "cfe:TotalMenosRetenciones").text = str(abs(round(self.amount_total_signed - RetencionIVA - RetencionISR, 2)))
+
+
+        if (tipo == 'FCAM'):
+            Complementos = ET.SubElement(DatosEmision, "dte:Complementos")
+
+            diComplemento = {
+                'IDComplemento': "Cambiaria",
+                'NombreComplemento': "Cambiaria",
+                'URIComplemento': "http://www.sat.gob.gt/fel/cambiaria.xsd",
+            }
+
+            Complemento = ET.SubElement(Complementos, "dte:Complemento", diComplemento)
+
+            dicCamb = {
+                'xmlns:cfc': "http://www.sat.gob.gt/dte/fel/CompCambiaria/0.1.0",
+                'Version' : "1",
+                'xsi:schemaLocation' : "http://www.sat.gob.gt/dte/fel/CompCambiaria/0.1.0"
+            }
+
+            FacturaCambiaria = ET.SubElement(Complemento, "cfc:AbonosFacturaCambiaria", dicCamb)
+
+            Abono = ET.SubElement(FacturaCambiaria, "cfc:Abono")
+
+            fechapago = str(self.invoice_date_due)
+
+            ET.SubElement(Abono, "cfc:NumeroAbono").text = "1"
+            ET.SubElement(Abono, "cfc:FechaVencimiento").text = fechapago
+            ET.SubElement(Abono, "cfc:MontoAbono").text = str(abs(round(self.amount_total_signed, 2)))
 
 
         if (self.name == "/"):
@@ -362,8 +428,8 @@ class controllerfel:
             "FechaHoraAnulacion" : fechaanulacion,
             "ID" : "DatosAnulacion",
             "IDReceptor" : self.partner_id.vat,
-            "MotivoAnulacion" : "Cancelacion de factura",
-            "NITEmisor" : "2459413K",
+            "MotivoAnulacion" : "Anulacion de documento FEL",
+            "NITEmisor" : self.env.company.fel_nit_emisor,
             "NumeroDocumentoAAnular" : self.fel_uuid
         }
 
@@ -393,7 +459,7 @@ class controllerfel:
         return json.loads(response.text)
 
     def generaFel(self):
-        if (self.move_type == "out_invoice"):
+        if (self.move_type == "out_invoice") or (self.move_type == "in_invoice"):
 
             fel_Xml = controllerfel.genxml(self,self.journal_id.fel_tipo_fel)
 
@@ -432,7 +498,7 @@ class controllerfel:
 
         if (self.move_type == "out_refund"):
 
-            fel_Xml = controllerfel.genxml(self,'NCRE')
+            fel_Xml = controllerfel.genxml(self,self.journal_id.fel_tipo_fel)
 
             data = controllerfel.firmafel(self,fel_Xml)
 
