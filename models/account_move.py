@@ -27,6 +27,7 @@ class account_move(models.Model):
         if self.journal_id.fel_tipo_registro == 'Si':
             confel.generaFel(self)
 
+
         return res
 
 
