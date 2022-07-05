@@ -8,6 +8,7 @@ class ResPartner(models.Model):
     fel_emisor_clave = fields.Char(string='Emisor Clave')
     fel_url_nit = fields.Char(string='Url Nit')
     fel_entorno = fields.Selection([ ('P','Produccion'),('D','Desarrollo/Pruebas')],string='Entorno',required=True, default='D')
+    fel_codigo_imp = fields.Selection([ ('S','Si'),('N','No')],string='Imprime codigo al final',required=True, default='N')
 
     fel_UsuarioFirma = fields.Char(string='Usuario Firma (Prefijo WS)')
     fel_LlaveFirma = fields.Char(string='Llave Firma (Token Signer)')

@@ -6,8 +6,10 @@ from datetime import datetime
 from odoo.exceptions import ValidationError
 
 
+
 class controllerfel:
     def genxml(self,tipo):
+
         dicGTDocumento = {
             'xmlns:ds': "http://www.w3.org/2000/09/xmldsig#",
             'xmlns:dte': "http://www.sat.gob.gt/dte/fel/0.2.0",
@@ -172,12 +174,16 @@ class controllerfel:
             if detalleFactura.product_id.display_name != detalleFactura.name:
                 descripcion_producto = detalleFactura.name
             else:
-                descripcion_producto = detalleFactura.product_id.name
+                if self.env.company.fel_codigo_imp == 'N':
+                    descripcion_producto = detalleFactura.product_id.name
+                else:
+                    descripcion_producto = detalleFactura.product_id.name + ' ' + detalleFactura.product_id.default_code
 
             # producto_sintres = detalleFactura.product_id.name.replace('   ', ' ')
             producto_sintres = descripcion_producto.replace('   ', ' ')
             producto_sindos = producto_sintres.replace('  ', ' ')
             producto = producto_sindos.strip()
+
             ET.SubElement(Item, "dte:Descripcion").text = producto
             ET.SubElement(Item, "dte:PrecioUnitario").text = preciounitario
             ET.SubElement(Item, "dte:Precio").text = precio
@@ -408,6 +414,7 @@ class controllerfel:
 
         if self.env.company.fel_service == "S":
             response = requests.post(url, data=ET.tostring(data,encoding="unicode"), headers=headers)
+
             return json.loads(response.text)
         else:
             return response_pru

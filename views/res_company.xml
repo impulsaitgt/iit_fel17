@@ -16,6 +16,7 @@
                                     <field name="fel_service"/>
                                     <field name="fel_url"/>
                                     <field name="fel_url_firma"/>
+                                    <field name="fel_codigo_imp"/>
                                 </group>
                                 <group string="Para NIT-SAT">
                                     <field name="fel_emisor_codigo"/>
