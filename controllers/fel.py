@@ -29,7 +29,8 @@ class controllerfel:
             'ID': "DatosEmision"
         }
 
-        fechafel = str(self.create_date.date())+"T"+str(self.create_date.strftime("%H:%M:%S"))+"-06:00"
+
+        fechafel = str(self.date)+"T"+str(self.create_date.strftime("%H:%M:%S"))+"-06:00"
 
         dicDatosGenerales = {
             'CodigoMoneda': "GTQ",
