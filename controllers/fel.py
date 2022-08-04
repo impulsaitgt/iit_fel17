@@ -128,12 +128,12 @@ class controllerfel:
         #         ET.SubElement(Frases, "dte:Frase", dicFrase)
         # Aqui termina frases que funcionan
 
+        Iva = round(self.amount_tax_signed, 2)
         if (tipo != 'NCRE') and (tipo != 'NDEB'):
             Frases = ET.SubElement(DatosEmision, "dte:Frases")
             for frase in self.env.company.fel_frases:
-                Iva = round(self.amount_tax_signed, 2)
-                if (((Iva >  0) and (frase.fel_frases_codigo_escenario ==  1))
-                or  ((Iva == 0) and (frase.fel_frases_codigo_escenario == 13))):
+                if (((Iva >  0) and (frase.fel_frases_codigo_escenario ==  '1'))
+                or  ((Iva == 0) and (frase.fel_frases_codigo_escenario == '13'))):
                     dicFrase = {
                         'CodigoEscenario': frase.fel_frases_codigo_escenario,
                         'TipoFrase': frase.fel_frases_tipo_frase
