@@ -441,7 +441,7 @@ class controllerfel:
             'ID': "DatosCertificados"
         }
 
-        fechafel = str(self.create_date.date())+"T"+str(self.create_date.strftime("%H:%M:%S"))+"-06:00"
+        fechafel = str(self.date)+"T"+str(self.create_date.strftime("%H:%M:%S"))+"-06:00"
         hoy = datetime.today()
         fechaanulacion = str(hoy.date())+"T"+str(hoy.strftime("%H:%M:%S"))+"-06:00"
 
