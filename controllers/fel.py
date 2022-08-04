@@ -131,13 +131,16 @@ class controllerfel:
         if (tipo != 'NCRE') and (tipo != 'NDEB'):
             Frases = ET.SubElement(DatosEmision, "dte:Frases")
             for frase in self.env.company.fel_frases:
-                dicFrase = {
-                    'CodigoEscenario': frase.fel_frases_codigo_escenario,
-                    'TipoFrase': frase.fel_frases_tipo_frase
-                }
+                Iva = round(self.amount_tax_signed, 2)
+                if (((Iva >  0) and (frase.fel_frases_codigo_escenario ==  1))
+                or  ((Iva == 0) and (frase.fel_frases_codigo_escenario == 13))):
+                    dicFrase = {
+                        'CodigoEscenario': frase.fel_frases_codigo_escenario,
+                        'TipoFrase': frase.fel_frases_tipo_frase
+                    }
 
-                if frase.fel_frases_tipos.count(tipo) == 1:
-                    ET.SubElement(Frases, "dte:Frase", dicFrase)
+                    if frase.fel_frases_tipos.count(tipo) == 1:
+                        ET.SubElement(Frases, "dte:Frase", dicFrase)
 
 
 
