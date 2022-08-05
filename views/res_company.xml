@@ -8,55 +8,39 @@
         <field name="arch" type="xml">
             <page name="general_info" position="after">
                 <page name="fel" string="Factura Electronica">
-                    <notebook string="Configuracion FEL">
-                        <page name="fel_parametros" string="Parametros">
-                            <group>
-                                <group string="Entorno">
-                                    <field name="fel_entorno"/>
-                                    <field name="fel_service"/>
-                                    <field name="fel_url"/>
-                                    <field name="fel_url_firma"/>
-                                    <field name="fel_codigo_imp"/>
-                                </group>
-                                <group string="Para NIT-SAT">
-                                    <field name="fel_emisor_codigo"/>
-                                    <field name="fel_emisor_clave"/>
-                                    <field name="fel_url_nit"/>
-                                </group>
-                            </group>
-                            <group>
-                                <group string="Firma">
-                                    <field name="fel_UsuarioFirma"/>
-                                    <field name="fel_LlaveFirma"/>
-                                    <field name="fel_UsuarioApi"/>
-                                    <field name="fel_LlaveApi"/>
-                                </group>
-                                <group string="Emisor">
-                                    <field name="fel_codigo_establecimiento"/>
-                                    <field name="fel_correo_emisor"/>
-                                    <field name="fel_nit_emisor"/>
-                                    <field name="fel_nombre_Comercial"/>
-                                    <field name="fel_nombre_emisor"/>
-                                    <field name="fel_direccion"/>
-                                    <field name="fel_codigo_postal"/>
-                                    <field name="fel_departamento"/>
-                                    <field name="fel_municipio"/>
-                                </group>
-                            </group>
-                        </page>
-                        <page name="fel_frases" string="Frases">
-                            <field name="fel_frases" widget="section_and_note_many2many" mode="tree">
-                                <tree editable="botoom" string="Frases">
-                                    <control>
-                                        <create name="agrega_frase" string="Agrega Frase"/>
-                                    </control>
-                                    <field name="fel_frases_tipos"/>
-                                    <field name="fel_frases_codigo_escenario"/>
-                                    <field name="fel_frases_tipo_frase"/>
-                                </tree>
-                            </field>
-                        </page>
-                    </notebook>
+                    <group>
+                        <group string="Entorno">
+                            <field name="fel_entorno"/>
+                            <field name="fel_service"/>
+                            <field name="fel_url"/>
+                            <field name="fel_url_firma"/>
+                            <field name="fel_codigo_imp"/>
+                        </group>
+                        <group string="Para NIT-SAT">
+                            <field name="fel_emisor_codigo"/>
+                            <field name="fel_emisor_clave"/>
+                            <field name="fel_url_nit"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Firma">
+                            <field name="fel_UsuarioFirma"/>
+                            <field name="fel_LlaveFirma"/>
+                            <field name="fel_UsuarioApi"/>
+                            <field name="fel_LlaveApi"/>
+                        </group>
+                        <group string="Emisor">
+                            <field name="fel_codigo_establecimiento"/>
+                            <field name="fel_correo_emisor"/>
+                            <field name="fel_nit_emisor"/>
+                            <field name="fel_nombre_Comercial"/>
+                            <field name="fel_nombre_emisor"/>
+                            <field name="fel_direccion"/>
+                            <field name="fel_codigo_postal"/>
+                            <field name="fel_departamento"/>
+                            <field name="fel_municipio"/>
+                        </group>
+                    </group>
                 </page>
             </page>
         </field>

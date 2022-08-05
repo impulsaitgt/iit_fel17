@@ -27,15 +27,5 @@ class ResPartner(models.Model):
     fel_departamento = fields.Char(string="Departamento")
     fel_municipio = fields.Char(string='Municipio')
 
-    fel_frases = fields.One2many(comodel_name='fel.res.partner.frases', inverse_name='fel_res_partner_id')
-
-
-class ResPartnerFrases(models.Model):
-    _name = 'fel.res.partner.frases'
-
-    fel_res_partner_id = fields.Many2one(comodel_name='res.company')
-    fel_frases_tipos = fields.Char(string="Documentos relacionados", required=True, default="FACT")
-    fel_frases_codigo_escenario = fields.Char(string="Codigo Escenario", required=True)
-    fel_frases_tipo_frase = fields.Char(string="Tipo Frase", required=True)
 
 
