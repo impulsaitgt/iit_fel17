@@ -215,7 +215,7 @@ class controllerfel:
             total = str(abs(round(detalleFactura.price_total,2)))
 
             ET.SubElement(Impuesto, "dte:NombreCorto").text = "IVA"
-            if (ivauni == 0) and (gravale > 0):
+            if (ivauni == 0) and (gravable > 0):
                 ET.SubElement(Impuesto, "dte:CodigoUnidadGravable").text = "2"
             else:
                 ET.SubElement(Impuesto, "dte:CodigoUnidadGravable").text = "1"
