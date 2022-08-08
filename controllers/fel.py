@@ -208,16 +208,17 @@ class controllerfel:
             Impuestos = ET.SubElement(Item, "dte:Impuestos")
             Impuesto = ET.SubElement(Impuestos, "dte:Impuesto")
 
+            gravable = round(detalleFactura.price_subtotal,2)
             montogravable = str(abs(round(detalleFactura.price_subtotal,2)))
             ivauni = abs(round(detalleFactura.price_total - detalleFactura.price_subtotal, 2))
             montoimpuesto = str(ivauni)
             total = str(abs(round(detalleFactura.price_total,2)))
 
             ET.SubElement(Impuesto, "dte:NombreCorto").text = "IVA"
-            if ivauni > 0:
-                ET.SubElement(Impuesto, "dte:CodigoUnidadGravable").text = "1"
-            else:
+            if (ivauni == 0) and (gravale > 0):
                 ET.SubElement(Impuesto, "dte:CodigoUnidadGravable").text = "2"
+            else:
+                ET.SubElement(Impuesto, "dte:CodigoUnidadGravable").text = "1"
             ET.SubElement(Impuesto, "dte:MontoGravable").text = montogravable
             ET.SubElement(Impuesto, "dte:MontoImpuesto").text = montoimpuesto
 
