@@ -474,16 +474,26 @@ class controllerfel:
         hoy = datetime.today()
         fechaanulacion = str(hoy.date())+"T"+str(hoy.strftime("%H:%M:%S"))+"-06:00"
 
-        dicDatosGenerales = {
-            "FechaEmisionDocumentoAnular" : fechafel,
-            "FechaHoraAnulacion" : fechaanulacion,
-            "ID" : "DatosAnulacion",
-            "IDReceptor" : self.partner_id.vat,
-            "MotivoAnulacion" : "Anulacion de documento FEL",
-            "NITEmisor" : self.env.company.fel_nit_emisor,
-            "NumeroDocumentoAAnular" : self.fel_uuid
-        }
-
+        if (round(self.amount_total_signed, 2) > 2500) and (self.partner_id.vat == 'CF'):
+            dicDatosGenerales = {
+                "FechaEmisionDocumentoAnular" : fechafel,
+                "FechaHoraAnulacion" : fechaanulacion,
+                "ID" : "DatosAnulacion",
+                "IDReceptor" : self.partner_id.ref,
+                "MotivoAnulacion" : "Anulacion de documento FEL",
+                "NITEmisor" : self.env.company.fel_nit_emisor,
+                "NumeroDocumentoAAnular" : self.fel_uuid
+            }
+        else:
+            dicDatosGenerales = {
+                "FechaEmisionDocumentoAnular" : fechafel,
+                "FechaHoraAnulacion" : fechaanulacion,
+                "ID" : "DatosAnulacion",
+                "IDReceptor" : self.partner_id.vat,
+                "MotivoAnulacion" : "Anulacion de documento FEL",
+                "NITEmisor" : self.env.company.fel_nit_emisor,
+                "NumeroDocumentoAAnular" : self.fel_uuid
+            }
 
         GTAnulaciondocumento = ET.Element("dte:GTAnulacionDocumento", dicGTAnulacionDocumento)
         SAT = ET.SubElement(GTAnulaciondocumento, "dte:SAT")
