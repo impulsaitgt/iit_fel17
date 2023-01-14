@@ -5,8 +5,6 @@ import base64
 import random
 from datetime import datetime
 
-from idna import unichr
-
 from odoo.exceptions import ValidationError
 
 
