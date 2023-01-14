@@ -1,8 +1,12 @@
+# -*- coding: utf-8 -*-
 import xml.etree.ElementTree as ET
 import json, requests
 import base64
 import random
 from datetime import datetime
+
+from idna import unichr
+
 from odoo.exceptions import ValidationError
 
 
@@ -56,12 +60,25 @@ class controllerfel:
         #     'NombreEmisor': "Rosa Victoria Rosado Lara de Estrada"
         # }
 
+        if (round(self.amount_total_signed, 2) > 2500) and (self.partner_id.vat == 'CF'):
+            if not self.partner_id.ref:
+                raise ValidationError('Para este tipo de factura debe especificar un CUI en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
 
-        dicReceptor = {
-            'CorreoReceptor': "",
-            'IDReceptor': self.partner_id.vat,
-            'NombreReceptor': self.partner_id.fel_nombre_sat
-        }
+            dicReceptor = {
+                'CorreoReceptor': "",
+                'IDReceptor': self.partner_id.ref,
+                'NombreReceptor': self.partner_id.fel_nombre_sat,
+                'TipoEspecial': 'CUI'
+            }
+        else:
+            if not self.partner_id.vat:
+                raise ValidationError('Para poder facturar debe especificar un Nit, o bien especificar CF')
+
+            dicReceptor = {
+                'CorreoReceptor': "",
+                'IDReceptor': self.partner_id.vat,
+                'NombreReceptor': self.partner_id.fel_nombre_sat
+            }
 
         dicFrase1 = {
             'CodigoEscenario': "1",
@@ -434,6 +451,7 @@ class controllerfel:
         }
 
         if self.env.company.fel_service == "S":
+
             response = requests.post(url, data=ET.tostring(data,encoding="unicode"), headers=headers)
 
             return json.loads(response.text)
