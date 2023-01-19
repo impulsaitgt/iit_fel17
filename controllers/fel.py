@@ -592,11 +592,28 @@ class controllerfel:
 
             fel_AnulaXml = controllerfel.genxmlanulacion(self)
 
-            print(ET.tostring(fel_AnulaXml))
+            if self.env.company.fel_entorno == "D":
+                ET.ElementTree(fel_AnulaXml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/pararevisar_anula.xml",encoding="unicode")
+            else:
+                ET.ElementTree(fel_AnulaXml).write("/opt/odoo/fel/pararevisar_anula.xml",encoding="unicode")
 
             anula_fel = controllerfel.firmaanulafel(self,fel_AnulaXml)
 
             if not anula_fel['resultado']:
+
+                if self.env.company.fel_entorno == "D":
+                    ruta = "/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/error.json"
+                else:
+                    ruta = "/opt/odoo/fel/error.json"
+
+                with open(ruta, 'w') as fp:
+                    json.dump(json.loads(anula_fel.text), fp)
+
                 errores = anula_fel['descripcion_errores']
                 raise ValidationError(errores[0]['mensaje_error'])
+
+            if self.env.company.fel_entorno == "D":
+                ET.ElementTree(fel_AnulaXml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/" + self.fel_uuid + "_anula.xml", encoding="unicode")
+            else:
+                ET.ElementTree(fel_AnulaXml).write("/opt/odoo/fel/" + self.fel_uuid + "_anula.xml",encoding="unicode")
 
