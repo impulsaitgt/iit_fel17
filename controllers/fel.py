@@ -184,10 +184,16 @@ class controllerfel:
         linea = 1
 
         for detalleFactura in detallesFactura:
-            dicItem = {
-                'BienOServicio': "B",
-                'NumeroLinea': str(linea),
-            }
+            if detalleFactura.product_id.type == "service":
+                dicItem = {
+                    'BienOServicio': "S",
+                    'NumeroLinea': str(linea),
+                }
+            else:
+                dicItem = {
+                    'BienOServicio': "B",
+                    'NumeroLinea': str(linea),
+                }
 
             linea += 1
 
@@ -211,11 +217,11 @@ class controllerfel:
                     descripcion_producto = detalleFactura.product_id.name + ' ' + detalleFactura.product_id.default_code
 
             # producto_sintres = detalleFactura.product_id.name.replace('   ', ' ')
-            producto_sintres = descripcion_producto.replace('   ', ' ')
-            producto_sindos = producto_sintres.replace('  ', ' ')
-            producto = producto_sindos.strip()
+            # producto_sintres = descripcion_producto.replace('   ', ' ')
+            # producto_sindos = producto_sintres.replace('  ', ' ')
+            # producto = producto_sindos.strip()
 
-            ET.SubElement(Item, "dte:Descripcion").text = producto
+            ET.SubElement(Item, "dte:Descripcion").text = descripcion_producto
             ET.SubElement(Item, "dte:PrecioUnitario").text = preciounitario
             ET.SubElement(Item, "dte:Precio").text = precio
             ET.SubElement(Item, "dte:Descuento").text = descuento
@@ -396,38 +402,7 @@ class controllerfel:
 
     def firmafel(self,data):
 
-        # url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
-
-        # headers = {
-        #     'UsuarioFirma': "IMPULSAIT_DEMO",
-        #     'LlaveFirma': "9f5daf529dcdbcef584e1ccf3955c03a",
-        #     'UsuarioApi': "IMPULSAIT_DEMO",
-        #     'LlaveApi': "B7CBA8C983E1DD32793F635526C40CFB",
-        #     'Identificador': self.name,
-        # }
-
         url = self.env.company.fel_url_firma
-        # url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
-
-        #print(data[0][1][0].text)
-
-        # headers = {
-        #     'UsuarioFirma': "2459413K",
-        #     'LlaveFirma': "8f898eb40aff0e4d060380004523b5ce",
-        #     'UsuarioApi': "2459413K",
-        #     'LlaveApi': "46155CE198281D56C1F479082C6946C7",
-        #     'Identificador': data[0][1][0].text,
-        # }
-
-        # Ultimo de Clean
-        # headers = {
-        #     'UsuarioFirma': "CLEAN_FACTORY",
-        #     'LlaveFirma': "c719e190a6eedfb203fe697fd17f3f34",
-        #     'UsuarioApi': "CLEAN_FACTORY",
-        #     'LlaveApi': "46155CE198281D56C1F479082C6946C7",
-        #     'Identificador': data[0][1][0].text,
-        # }
-
 
         response_pru = {
             "resultado": True,
@@ -450,7 +425,8 @@ class controllerfel:
 
         if self.env.company.fel_service == "S":
 
-            response = requests.post(url, data=ET.tostring(data,encoding="unicode"), headers=headers)
+            xml_data = ET.tostring(data, encoding="utf-8", xml_declaration=True)
+            response = requests.post(url, data=xml_data, headers=headers)
 
             return json.loads(response.text)
         else:
@@ -505,7 +481,6 @@ class controllerfel:
     def firmaanulafel(self,data):
 
         url = self.env.company.fel_url_firma
-        # url = "https://certificador.feel.com.gt/fel/procesounificado/transaccion/v2/xml"
 
         headers = {
             'UsuarioFirma': self.env.company.fel_UsuarioFirma,
@@ -515,7 +490,10 @@ class controllerfel:
             'Identificador': self.name,
         }
 
-        response = requests.post(url, data=ET.tostring(data), headers=headers)
+        # response = requests.post(url, data=ET.tostring(data), headers=headers)
+
+        xml_data = ET.tostring(data, encoding="utf-8", xml_declaration=True)
+        response = requests.post(url, data=xml_data, headers=headers)
 
         return json.loads(response.text)
 
@@ -528,7 +506,6 @@ class controllerfel:
                 ET.ElementTree(fel_Xml).write("/home/iitadmin/Documentos/Odoo/odoo-14.0/fel/pararevisar.xml",encoding="unicode")
             else:
                 ET.ElementTree(fel_Xml).write("/opt/odoo/fel/pararevisar.xml",encoding="unicode")
-
 
             data = controllerfel.firmafel(self,fel_Xml)
 
