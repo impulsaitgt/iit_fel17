@@ -59,7 +59,7 @@ class controllerfel:
         # }
 
         if (tipo == 'NCRE'):
-            if (round(abs(self.amount_total_signed), 2) > 2500) and (self.partner_id.vat == 'CF') and (self.fel_fecha > datetime(2023, 1, 15)):
+            if (round(abs(self.amount_total_signed), 2) > 2500) and (self.partner_id.vat == 'CF') and (str(self.fel_fecha) > '2023-01-15)'):
                 if not self.partner_id.ref:
                     raise ValidationError('Para este tipo de factura debe especificar un CUI en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
 
