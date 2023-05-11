@@ -6,6 +6,8 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     fel_nombre_sat = fields.Char(string='Nombre SAT', default="Consumidor Final") # Nombre SAT
+    fel_extranjero = fields.Selection([('No', 'No'), ('Si', 'Si')], default='No', string='Extranjero')
+
 
     @api.onchange('vat')
     def onchange_vat(self):

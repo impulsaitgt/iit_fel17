@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <field name="vat" position="after">
                 <field name="fel_nombre_sat"/>
+                <field name="fel_extranjero"/>
             </field>
         </field>
     </record>

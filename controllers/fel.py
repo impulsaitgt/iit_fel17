@@ -81,14 +81,24 @@ class controllerfel:
         else:
             if (round(abs(self.amount_total_signed), 2) >= 2500) and (self.partner_id.vat == 'CF'):
                 if not self.partner_id.ref:
-                    raise ValidationError('Para este tipo de factura debe especificar un CUI en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
+                    raise ValidationError('Para este tipo de factura debe especificar un CUI o documento de extranjero en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
 
-                dicReceptor = {
-                    'CorreoReceptor': "",
-                    'IDReceptor': self.partner_id.ref,
-                    'NombreReceptor': self.partner_id.fel_nombre_sat,
-                    'TipoEspecial': 'CUI'
-                }
+
+                if self.parner_id.fel_extranjero == 'No':
+                    dicReceptor = {
+                        'CorreoReceptor': "",
+                        'IDReceptor': self.partner_id.ref,
+                        'NombreReceptor': self.partner_id.fel_nombre_sat,
+                        'TipoEspecial': 'CUI'
+                    }
+                else:
+                    dicReceptor = {
+                        'CorreoReceptor': "",
+                        'IDReceptor': self.partner_id.ref,
+                        'NombreReceptor': self.partner_id.fel_nombre_sat,
+                        'TipoEspecial': 'EXT'
+                    }
+
             else:
                 if not self.partner_id.vat:
                     raise ValidationError('Para poder facturar debe especificar un Nit, o bien especificar CF')
