@@ -84,7 +84,7 @@ class controllerfel:
                     raise ValidationError('Para este tipo de factura debe especificar un CUI o documento de extranjero en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
 
 
-                if self.parner_id.fel_extranjero == 'No':
+                if self.partner_id.fel_extranjero == 'No':
                     dicReceptor = {
                         'CorreoReceptor': "",
                         'IDReceptor': self.partner_id.ref,
