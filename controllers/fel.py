@@ -58,25 +58,56 @@ class controllerfel:
         #     'NombreEmisor': "Rosa Victoria Rosado Lara de Estrada"
         # }
 
-        if (round(abs(self.amount_total_signed), 2) > 2500) and (self.partner_id.vat == 'CF'):
-            if not self.partner_id.ref:
-                raise ValidationError('Para este tipo de factura debe especificar un CUI en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
+        if (tipo == 'NCRE'):
+            if (round(abs(self.amount_total_signed), 2) > 2500) and (self.partner_id.vat == 'CF') and (str(self.fel_fecha) > '2023-01-15)'):
+                if not self.partner_id.ref:
+                    raise ValidationError('Para este tipo de factura debe especificar un CUI en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
 
-            dicReceptor = {
-                'CorreoReceptor': "",
-                'IDReceptor': self.partner_id.ref,
-                'NombreReceptor': self.partner_id.fel_nombre_sat,
-                'TipoEspecial': 'CUI'
-            }
+                dicReceptor = {
+                    'CorreoReceptor': "",
+                    'IDReceptor': self.partner_id.ref,
+                    'NombreReceptor': self.partner_id.fel_nombre_sat,
+                    'TipoEspecial': 'CUI'
+                }
+            else:
+                if not self.partner_id.vat:
+                    raise ValidationError('Para poder facturar debe especificar un Nit, o bien especificar CF')
+
+                dicReceptor = {
+                    'CorreoReceptor': "",
+                    'IDReceptor': self.partner_id.vat,
+                    'NombreReceptor': self.partner_id.fel_nombre_sat
+                }
         else:
-            if not self.partner_id.vat:
-                raise ValidationError('Para poder facturar debe especificar un Nit, o bien especificar CF')
+            if (round(abs(self.amount_total_signed), 2) >= 2500) and (self.partner_id.vat == 'CF'):
+                if not self.partner_id.ref:
+                    raise ValidationError('Para este tipo de factura debe especificar un CUI o documento de extranjero en el campo "Referencia" del cliente, en la pestaña "Venta y Compra"')
 
-            dicReceptor = {
-                'CorreoReceptor': "",
-                'IDReceptor': self.partner_id.vat,
-                'NombreReceptor': self.partner_id.fel_nombre_sat
-            }
+
+                if self.partner_id.fel_extranjero == 'No':
+                    dicReceptor = {
+                        'CorreoReceptor': "",
+                        'IDReceptor': self.partner_id.ref,
+                        'NombreReceptor': self.partner_id.fel_nombre_sat,
+                        'TipoEspecial': 'CUI'
+                    }
+                else:
+                    dicReceptor = {
+                        'CorreoReceptor': "",
+                        'IDReceptor': self.partner_id.ref,
+                        'NombreReceptor': self.partner_id.fel_nombre_sat,
+                        'TipoEspecial': 'EXT'
+                    }
+
+            else:
+                if not self.partner_id.vat:
+                    raise ValidationError('Para poder facturar debe especificar un Nit, o bien especificar CF')
+
+                dicReceptor = {
+                    'CorreoReceptor': "",
+                    'IDReceptor': self.partner_id.vat,
+                    'NombreReceptor': self.partner_id.fel_nombre_sat
+                }
 
         dicFrase1 = {
             'CodigoEscenario': "1",
