@@ -381,6 +381,7 @@ class controllerfel:
 
         Adenda = ET.SubElement(SAT, "dte:Adenda")
         ET.SubElement(Adenda, "Referencia").text = referencia
+        ET.SubElement(Adenda, "Vendedor").text = self.invoice_user_id.name
 
         return GTdocumento
 
