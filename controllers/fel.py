@@ -619,7 +619,7 @@ class controllerfel:
                     ruta = "/opt/odoo/fel/error.json"
 
                 with open(ruta, 'w') as fp:
-                    json.dump(json.loads(anula_fel.text), fp)
+                    json.dump(anula_fel, fp)
 
                 errores = anula_fel['descripcion_errores']
                 raise ValidationError(errores[0]['mensaje_error'])
