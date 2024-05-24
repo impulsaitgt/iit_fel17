@@ -461,8 +461,12 @@ class controllerfel:
 
         if self.env.company.fel_service == "S":
 
+            print('aqui va a ejecutar servicios')
             xml_data = ET.tostring(data, encoding="utf-8", xml_declaration=True)
+            print('xml_data: ',xml_data)
             response = requests.post(url, data=xml_data, headers=headers)
+            print('response: ',response)
+            print('response.text', response.text)
 
             return json.loads(response.text)
         else:
