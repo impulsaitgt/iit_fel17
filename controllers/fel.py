@@ -5,8 +5,10 @@ import base64
 import random
 from datetime import datetime
 
-from odoo.exceptions import ValidationError, _logger
+from odoo.exceptions import ValidationError
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class controllerfel:
     def genxml(self,tipo):
@@ -460,13 +462,12 @@ class controllerfel:
 
         if self.env.company.fel_service == "S":
 
-            print('aqui va a ejecutar servicios')
+            _logger.info('aqui va a ejecutar servicios')
             xml_data = ET.tostring(data, encoding="utf-8", xml_declaration=True)
-            print('xml_data: ',xml_data)
+            _logger.info('xml_data: ',xml_data)
             response = requests.post(url, data=xml_data, headers=headers)
-            _logger.info("Response content: %s", response.text)
-            print('response: ',response)
-            print('response.text', response.text)
+            _logger.info('response: ',response)
+            _logger.info('response.text', response.text)
 
             return json.loads(response.text)
         else:
