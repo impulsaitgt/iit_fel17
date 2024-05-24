@@ -5,8 +5,7 @@ import base64
 import random
 from datetime import datetime
 
-from odoo.exceptions import ValidationError
-
+from odoo.exceptions import ValidationError, _logger
 
 
 class controllerfel:
@@ -465,6 +464,7 @@ class controllerfel:
             xml_data = ET.tostring(data, encoding="utf-8", xml_declaration=True)
             print('xml_data: ',xml_data)
             response = requests.post(url, data=xml_data, headers=headers)
+            _logger.info("Response content: %s", response.text)
             print('response: ',response)
             print('response.text', response.text)
 
