@@ -22,13 +22,23 @@ class account_move(models.Model):
 
         return res
 
-    def action_post(self):
-        res = super(account_move, self).action_post()
-        if self.journal_id.fel_tipo_registro == 'Si':
-            confel.generaFel(self)
+    # def action_post(self):
+    #     res = super(account_move, self).action_post()
+    #     if self.journal_id.fel_tipo_registro == 'Si':
+    #         confel.generaFel(self)
+    #
+    #
+    #     return res
 
+    def write(self, vals):
+        res = super(account_move, self).write(vals)
+
+        if self.journal_id.fel_tipo_registro == 'Si':
+            if vals.get('state') == 'posted':
+                confel.generaFel(self)
 
         return res
+
 
 
     def button_cancel(self):
