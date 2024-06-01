@@ -12,6 +12,8 @@ class ResPartner(models.Model):
     @api.onchange('vat')
     def onchange_vat(self):
         if (self.vat):
+            
+            print("Aqui estoy")
 
             # url = "https://consultareceptores.feel.com.gt/rest/action"
             url = self.env.company.fel_url_nit

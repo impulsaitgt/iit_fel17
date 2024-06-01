@@ -1,5 +1,8 @@
 from odoo import api, models, fields
 from ..controllers.fel import controllerfel as confel
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class account_move(models.Model):
@@ -49,6 +52,7 @@ class account_move(models.Model):
         return res
 
     def action_firma_fel(self):
+        _logger.info("dieron click")
         if self.journal_id.fel_tipo_registro == 'Si':
             confel.generaFel(self)
 

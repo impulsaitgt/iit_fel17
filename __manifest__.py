@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 {
-    'name' : 'Factura Electronica Impulsa IT',
+    'name' : 'Factura Electronica Impulsa IT Odoo 17',
     'summary':"""
-        Implementacion Factura Electronica FEL con Infile
+        Implementacion Factura Electronica FEL con Infile, Odoo 17
     """,
     'author':'Alexander Paiz',
     'category': 'General',
