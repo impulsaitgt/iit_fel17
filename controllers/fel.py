@@ -249,6 +249,9 @@ class controllerfel:
                     descripcion_producto = detalleFactura.product_id.name
                     if self.env.company.fel_sep_codigo == 'S' and detalleFactura.product_id.default_code:
                         descripcion_producto = detalleFactura.product_id.default_code + '|' + descripcion_producto
+                    else:
+                        if self.env.company.fel_pri_codigo == 'S' and detalleFactura.product_id.default_code:
+                            descripcion_producto = detalleFactura.product_id.default_code + ' - ' +detalleFactura.product_id.name                        
                 else:
                     descripcion_producto = detalleFactura.product_id.name + ' ' + detalleFactura.product_id.default_code
 
